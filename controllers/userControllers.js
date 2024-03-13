@@ -19,14 +19,11 @@ exports.createUser = bigPromise(async (req, res, next) => {
 exports.loginUser = bigPromise(async (req, res, next) => {
     try {
         const { email, password } = req.body;
-
         const foundUser = await User.findOne({ email });
 
         const comparePassword = await foundUser.comparePassword(password);
 
-        const token = foundUser.getToken();
-
-        cookieToken(foundUser, 200, token)
+        cookieToken(foundUser, 200, res)
     } catch (error) {
         console.error(error);
         next(new ErrorHandler(error.message, 400));
